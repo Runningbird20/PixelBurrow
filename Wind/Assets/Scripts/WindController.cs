@@ -67,35 +67,6 @@ public class WindController : MonoBehaviour
         }
     }
 
-        HandleCarryInput();
-        UpdateEffects();
-    }
-
-    private void UpdateMovement()
-    {
-        Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
-
-        if (input.sqrMagnitude < 0.01f && Input.mousePresent)
-        {
-            input = MouseSteeringInput();
-        }
-
-        Vector3 targetVelocity = Vector3.ClampMagnitude(input, 1f) * speed;
-        velocity = Vector3.Lerp(velocity, targetVelocity, Time.deltaTime * acceleration);
-
-        transform.position += velocity * Time.deltaTime;
-
-        Vector3 clampedPosition = transform.position;
-        clampedPosition.y = Mathf.Clamp(clampedPosition.y, minHeight, maxHeight);
-        transform.position = clampedPosition;
-
-        if (velocity.sqrMagnitude > 0.01f)
-        {
-            Vector3 lookDirection = new Vector3(velocity.x, 0f, velocity.z);
-            transform.forward = Vector3.Slerp(transform.forward, lookDirection.normalized, Time.deltaTime * 8f);
-        }
-    }
-
     private Vector3 MouseSteeringInput()
     {
         if (mainCamera == null)
@@ -141,21 +112,8 @@ public class WindController : MonoBehaviour
                 continue;
             }
 
-            TryPickUp(item);
+            TryPickup(item);
             break;
-        }
-    }
-
-    private void HandleCarryInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && carriedItem != null)
-        {
-            Vector3 dropDirection = transform.forward + Vector3.up * 0.6f;
-
-            carriedItem.transform.parent = null;
-            carriedItem.transform.position = transform.position + transform.forward + Vector3.up * 0.5f;
-            carriedItem.Drop(dropForce, dropDirection);
-            carriedItem = null;
         }
     }
 
@@ -194,7 +152,7 @@ public class WindController : MonoBehaviour
 
         if (item != null && !item.isCarried)
         {
-            TryPickUp(item);
+            TryPickup(item);
         }
     }
 
@@ -225,33 +183,11 @@ public class WindController : MonoBehaviour
         return other.attachedRigidbody.GetComponent<Seed>();
     }
 
-    private void TryPickUp(Seed item)
-    {
-        if (item == null || item.isCarried || carriedItem != null)
+    #if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
         {
-            return;
-
-        Seed item = other.GetComponent<Seed>();
-
-        if (item != null && !item.isCarried)
-        {
-            carriedItem = item;
-            item.PickUp();
-            item.transform.parent = carryPoint;
-            item.transform.localPosition = item.carryLocalOffset;
+            Gizmos.color = new Color(0.55f, 0.9f, 1f, 0.7f);
+            Gizmos.DrawWireSphere(transform.position + pickupOffset, pickupRadius);
         }
-
-        carriedItem = item;
-        item.PickUp();
-        item.transform.parent = carryPoint;
-        item.transform.localPosition = item.carryLocalOffset;
-    }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = new Color(0.55f, 0.9f, 1f, 0.7f);
-        Gizmos.DrawWireSphere(transform.position + pickupOffset, pickupRadius);
-    }
-#endif
+    #endif
 }
