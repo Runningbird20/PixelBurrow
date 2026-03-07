@@ -7,6 +7,7 @@ public class WindController : MonoBehaviour
     public float acceleration = 4f;
     public float maxHeight = 6f;
     public float minHeight = 0f;
+    private Rigidbody rb;
 
     [Header("Carry")]
     public Transform carryPoint;
@@ -39,6 +40,8 @@ public class WindController : MonoBehaviour
     {
         mainCamera = Camera.main;
 
+        rb = GetComponent<Rigidbody>();
+
         if (carryPoint == null)
         {
             carryPoint = transform;
@@ -56,6 +59,7 @@ public class WindController : MonoBehaviour
         HandleCarryInput();
         UpdateEffects();
     }
+
 
     private Vector3 MouseSteeringInput()
     {
@@ -90,12 +94,6 @@ public class WindController : MonoBehaviour
 
         Vector3 targetVelocity = Vector3.ClampMagnitude(input, 1f) * speed;
         velocity = Vector3.Lerp(velocity, targetVelocity, Time.deltaTime * acceleration);
-
-        transform.position += velocity * Time.deltaTime;
-
-        Vector3 clampedPosition = transform.position;
-        clampedPosition.y = 0;
-        transform.position = clampedPosition;
 
         if (velocity.sqrMagnitude > 0.01f)
         {
@@ -229,6 +227,11 @@ public class WindController : MonoBehaviour
     private void TryPickUp(Seed item)
     {
         TryPickup(item);
+    }
+    
+    private void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
     }
 
     #if UNITY_EDITOR
