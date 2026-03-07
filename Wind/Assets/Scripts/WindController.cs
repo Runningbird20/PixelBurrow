@@ -11,7 +11,7 @@ public class WindController : MonoBehaviour
     [Header("Carry")]
     public Transform carryPoint;
     public float dropForce = 1.5f;
-    public float pickupRadius = 2f;
+    public float pickupRadius = 0.5f;
     public Vector3 pickupOffset = Vector3.zero;
     public LayerMask pickupMask = ~0;
     private bool insideZone = false;
