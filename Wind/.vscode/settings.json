@@ -67,5 +67,8 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Wind.slnx"
+    "dotnet.defaultSolution": "Wind.slnx",
+    "cSpell.words": [
+        "Behaviour"
+    ]
 }
