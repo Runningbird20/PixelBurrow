@@ -28,7 +28,7 @@ public class Seed : MonoBehaviour
     public void PickUp()
     {
         isCarried = true;
-        // this.GetComponent<AudioSource>().Play();
+        this.GetComponent<AudioSource>().Play();
         rb.isKinematic = true;
     }
 
