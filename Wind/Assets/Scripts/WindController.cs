@@ -2,20 +2,41 @@ using UnityEngine;
 
 public class WindController : MonoBehaviour
 {
-    public float speed = 6f;
-    public float smooth = 5f;
+    public float speed = 5f;
+    public Transform carryPoint;
 
-    Vector3 velocity;
+    private Seed carriedSeed;
 
     void Update()
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        Vector3 move = new Vector3(h, 0, v).normalized * speed;
+        Vector3 move = new Vector3(h, 0, v);
+        transform.position += move * speed * Time.deltaTime;
 
-        velocity = Vector3.Lerp(velocity, move, smooth * Time.deltaTime);
+        if (Input.GetKeyDown(KeyCode.Space) && carriedSeed != null)
+        {
+            carriedSeed.isCarried = false;
+            carriedSeed.transform.parent = null;
+            carriedSeed = null;
+        }
+    }
 
-        transform.Translate(velocity * Time.deltaTime, Space.World);
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Touched: " + other.name);
+
+        if (carriedSeed != null) return;
+
+        Seed seed = other.GetComponent<Seed>();
+
+        if (seed != null && !seed.isCarried)
+        {
+            carriedSeed = seed;
+            seed.isCarried = true;
+            seed.transform.parent = carryPoint;
+            seed.transform.localPosition = Vector3.zero;
+        }
     }
 }
