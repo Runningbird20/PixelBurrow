@@ -3,32 +3,19 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public Transform target;
-    public Vector3 offset = new Vector3(0, 5, -6);
+    public Vector3 offset = new Vector3(0f, 7f, -9f);
     public float smooth = 5f;
 
-    public static void MusicStart()
+    private void LateUpdate()
     {
-        switch (RestoreZone.numRestored)
+        if (target == null)
         {
-            case 1:
-                Camera.main.GetComponent<AudioSource>().Play();
-                break;
-            // case 2:
-            //     AudioManager.Instance.Play("Music2");
-            //     break;
-            // case 3:
-            //     AudioManager.Instance.Play("Music3");
-            //     break;
-            default:
-                break;
+            return;
         }
-    }
 
-    void LateUpdate()
-    {
         Vector3 desired = target.position + offset;
         transform.position = Vector3.Lerp(transform.position, desired, smooth * Time.deltaTime);
 
-        transform.LookAt(target);
+        transform.LookAt(target.position + Vector3.up * 1.5f);
     }
 }
