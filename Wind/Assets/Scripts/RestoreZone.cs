@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class RestoreZone : MonoBehaviour
 {
+    public static int numRestored = 0;
+
     public int seedsRequired = 2;
     private int seedsDelivered = 0;
 
@@ -20,6 +22,8 @@ public class RestoreZone : MonoBehaviour
         {
             seedsDelivered++;
 
+            if (seedsDelivered < seedsRequired) this.GetComponent<AudioSource>().Play();
+
             Destroy(seed.gameObject);
 
             Debug.Log("Seed delivered: " + seedsDelivered + "/" + seedsRequired);
@@ -28,6 +32,8 @@ public class RestoreZone : MonoBehaviour
             {
                 Restore();
             }
+
+            CameraFollow.MusicStart();
         }
     }
 
@@ -42,5 +48,7 @@ public class RestoreZone : MonoBehaviour
             restoredVisuals.SetActive(true);
 
         Debug.Log(gameObject.name + " restored!");
+
+        numRestored++;
     }
 }
