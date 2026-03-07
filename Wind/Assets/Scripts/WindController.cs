@@ -6,54 +6,55 @@ public class WindController : MonoBehaviour
     public float speed = 8f;
     public float acceleration = 4f;
     public float maxHeight = 6f;
-    public float minHeight = 1f;
+    public float minHeight = 0f;
 
     [Header("Carry")]
     public Transform carryPoint;
     public float dropForce = 1.5f;
+    public float pickupRadius = 2f;
+    public Vector3 pickupOffset = new Vector3(0f, 2f, 0f);
+    public LayerMask pickupMask = ~0;
+    private bool insideZone = false;
 
     [Header("FX")]
     public ParticleSystem windTrail;
 
     private Seed carriedItem;
     private Vector3 velocity;
-
+    private float pickupCooldownTimer = 0f;
+    public float pickupCooldownDuration = 0.5f;
     private Camera mainCamera;
+    private readonly Collider[] pickupHits = new Collider[16];
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("RestoreZone"))
+        {
+            insideZone = false;
+            Debug.Log("Exited restore zone");
+        }
+    }
 
     private void Start()
     {
         mainCamera = Camera.main;
+
+        if (carryPoint == null)
+        {
+            carryPoint = transform;
+        }
     }
 
     private void Update()
     {
         UpdateMovement();
+        TryPickupNearbyItem();
         HandleCarryInput();
         UpdateEffects();
-    }
 
-    private void UpdateMovement()
-    {
-        Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
-
-        if (input.sqrMagnitude < 0.01f && Input.mousePresent)
+        if (pickupCooldownTimer > 0f)
         {
-            input = MouseSteeringInput();
-        }
-
-        Vector3 targetVelocity = Vector3.ClampMagnitude(input, 1f) * speed;
-        velocity = Vector3.Lerp(velocity, targetVelocity, Time.deltaTime * acceleration);
-
-        transform.position += velocity * Time.deltaTime;
-
-        Vector3 clampedPosition = transform.position;
-        clampedPosition.y = Mathf.Clamp(clampedPosition.y, minHeight, maxHeight);
-        transform.position = clampedPosition;
-
-        if (velocity.sqrMagnitude > 0.01f)
-        {
-            Vector3 lookDirection = new Vector3(velocity.x, 0f, velocity.z);
-            transform.forward = Vector3.Slerp(transform.forward, lookDirection.normalized, Time.deltaTime * 8f);
+            pickupCooldownTimer -= Time.deltaTime;
         }
     }
 
@@ -79,9 +80,67 @@ public class WindController : MonoBehaviour
         return direction.normalized;
     }
 
+    private void UpdateMovement()
+    {
+        Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+
+        if (input.sqrMagnitude < 0.01f && Input.mousePresent)
+        {
+            input = MouseSteeringInput();
+        }
+
+        Vector3 targetVelocity = Vector3.ClampMagnitude(input, 1f) * speed;
+        velocity = Vector3.Lerp(velocity, targetVelocity, Time.deltaTime * acceleration);
+
+        transform.position += velocity * Time.deltaTime;
+
+        Vector3 clampedPosition = transform.position;
+        clampedPosition.y = 0;
+        transform.position = clampedPosition;
+
+        if (velocity.sqrMagnitude > 0.01f)
+        {
+            Vector3 lookDirection = new Vector3(velocity.x, 0f, velocity.z);
+            transform.forward = Vector3.Slerp(transform.forward, lookDirection.normalized, Time.deltaTime * 8f);
+        }
+    }
+
+    private void TryPickupNearbyItem()
+    {
+        if (carriedItem != null || pickupCooldownTimer > 0f)
+        {
+            return;
+        }
+
+        Vector3 pickupCenter = transform.position + pickupOffset;
+        int hits = Physics.OverlapSphereNonAlloc(
+            pickupCenter,
+            pickupRadius,
+            pickupHits,
+            pickupMask,
+            QueryTriggerInteraction.Collide);
+
+        for (int i = 0; i < hits; i++)
+        {
+            Seed item = GetSeedFromCollider(pickupHits[i]);
+            if (item == null || item.isCarried)
+            {
+                continue;
+            }
+
+            TryPickup(item);
+            break;
+        }
+    }
+
     private void HandleCarryInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && carriedItem != null)
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Space pressed | carriedItem: " + (carriedItem != null) + " | insideZone: " + insideZone);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && carriedItem != null && insideZone)
         {
             Vector3 dropDirection = transform.forward + Vector3.up * 0.6f;
 
@@ -89,6 +148,10 @@ public class WindController : MonoBehaviour
             carriedItem.transform.position = transform.position + transform.forward + Vector3.up * 0.5f;
             carriedItem.Drop(dropForce, dropDirection);
             carriedItem = null;
+
+            pickupCooldownTimer = pickupCooldownDuration;
+
+            Debug.Log("Dropped seed in restore zone");
         }
     }
 
@@ -105,19 +168,64 @@ public class WindController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (carriedItem != null)
+        if (other.CompareTag("RestoreZone"))
+        {
+            insideZone = true;
+            Debug.Log("Entered restore zone");
+        }
+    }
+
+    private Seed GetSeedFromCollider(Collider other)
+    {
+        if (other == null)
+        {
+            return null;
+        }
+
+        Seed seed = other.GetComponent<Seed>();
+        if (seed != null)
+        {
+            return seed;
+        }
+
+        seed = other.GetComponentInParent<Seed>();
+        if (seed != null)
+        {
+            return seed;
+        }
+
+        if (other.attachedRigidbody == null)
+        {
+            return null;
+        }
+
+        return other.attachedRigidbody.GetComponent<Seed>();
+    }
+
+    private void TryPickup(Seed item)
+    {
+        if (item == null || item.isCarried || carriedItem != null)
         {
             return;
         }
 
-        Seed item = other.GetComponent<Seed>();
-
-        if (item != null && !item.isCarried)
-        {
-            carriedItem = item;
-            item.PickUp();
-            item.transform.parent = carryPoint;
-            item.transform.localPosition = item.carryLocalOffset;
-        }
+        carriedItem = item;
+        item.PickUp();
+        item.transform.parent = carryPoint;
+        item.transform.localPosition = item.carryLocalOffset;
     }
+
+    // Backward-compatible alias in case existing scene scripts/events still refer to the old method name.
+    private void TryPickUp(Seed item)
+    {
+        TryPickup(item);
+    }
+
+    #if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = new Color(0.55f, 0.9f, 1f, 0.7f);
+            Gizmos.DrawWireSphere(transform.position + pickupOffset, pickupRadius);
+        }
+    #endif
 }
