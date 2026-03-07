@@ -12,6 +12,7 @@ public class Seed : MonoBehaviour
     [Header("Item Settings")]
     public NatureItemType itemType = NatureItemType.Seed;
     public bool isCarried = false;
+    public bool hasBeenPickedUp = false;
 
     [Header("Carry Visual")]
     public Vector3 carryLocalOffset = Vector3.zero;
@@ -28,6 +29,7 @@ public class Seed : MonoBehaviour
     public void PickUp()
     {
         isCarried = true;
+        hasBeenPickedUp = true;
 
         if (rb != null)
         {

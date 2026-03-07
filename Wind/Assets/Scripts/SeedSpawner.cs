@@ -6,7 +6,7 @@ public class SeedSpawner : MonoBehaviour
 {
     [Header("Spawn Setup")]
     public Seed seedPrefab;
-    public int targetSeedCount = 3;
+    public int targetSeedCount = 10;
     public bool useTaggedSpawnAreas = true;
     public string spawnAreaTag = "SeedSpawn";
     public Transform[] spawnPoints;

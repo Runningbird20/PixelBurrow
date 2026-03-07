@@ -12,12 +12,7 @@ public class RestoreZone : MonoBehaviour
     public GameObject barrenVisuals;
     public ParticleSystem restoreBurst;
 
-    [Header("Life Spawn")]
-    public GameObject[] plantPrefabs;
-    public int plantsToSpawn = 3;
-    public GameObject[] animalPrefabs;
-    public int animalsToSpawn = 2;
-    public float spawnRadius = 3f;
+    public ZonePlantSpawner plantSpawner;
 
     [Header("Events")]
     public UnityEvent onZoneRestored;
@@ -27,6 +22,19 @@ public class RestoreZone : MonoBehaviour
 
     public static int TotalZonesRestored = 0;
 
+    private void Awake()
+    {
+        if (plantSpawner == null)
+        {
+            plantSpawner = GetComponent<ZonePlantSpawner>();
+        }
+
+        if (plantSpawner == null)
+        {
+            plantSpawner = GetComponentInChildren<ZonePlantSpawner>();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (isRestored)
@@ -34,8 +42,8 @@ public class RestoreZone : MonoBehaviour
             return;
         }
 
-        Seed item = other.GetComponent<Seed>();
-        if (item == null || item.isCarried || item.itemType != requiredItemType)
+        Seed item = GetSeedFromCollider(other);
+        if (item == null || item.isCarried || item.itemType != requiredItemType || !item.hasBeenPickedUp)
         {
             return;
         }
@@ -58,6 +66,22 @@ public class RestoreZone : MonoBehaviour
     {
         isRestored = true;
 
+        restoredVisuals.SetActive(true);
+
+        if (plantSpawner == null)
+        {
+            plantSpawner = GetComponentInChildren<ZonePlantSpawner>();
+        }
+
+        if (plantSpawner != null)
+        {
+            plantSpawner.SpawnPlants();
+        }
+        else
+        {
+            Debug.LogWarning($"RestoreZone '{name}' has no ZonePlantSpawner assigned or found.");
+        }
+        
         if (barrenVisuals != null)
         {
             barrenVisuals.SetActive(false);
@@ -81,34 +105,35 @@ public class RestoreZone : MonoBehaviour
         }
 
         TotalZonesRestored++;
-        
-
-        SpawnPrefabs(plantPrefabs, plantsToSpawn);
-        SpawnPrefabs(animalPrefabs, animalsToSpawn);
 
         onZoneRestored?.Invoke();
         WindWorldDirector.ReportZoneRestored();
     }
 
-    private void SpawnPrefabs(GameObject[] prefabs, int amount)
+    private Seed GetSeedFromCollider(Collider other)
     {
-        if (prefabs == null || prefabs.Length == 0 || amount <= 0)
+        if (other == null)
         {
-            return;
+            return null;
         }
 
-        for (int i = 0; i < amount; i++)
+        Seed seed = other.GetComponent<Seed>();
+        if (seed != null)
         {
-            GameObject prefab = prefabs[Random.Range(0, prefabs.Length)];
-            if (prefab == null)
-            {
-                continue;
-            }
-
-            Vector2 offset2D = Random.insideUnitCircle * spawnRadius;
-            Vector3 spawnPosition = transform.position + new Vector3(offset2D.x, 0f, offset2D.y);
-
-            Instantiate(prefab, spawnPosition, Quaternion.Euler(0f, Random.Range(0f, 360f), 0f));
+            return seed;
         }
+
+        seed = other.GetComponentInParent<Seed>();
+        if (seed != null)
+        {
+            return seed;
+        }
+
+        if (other.attachedRigidbody == null)
+        {
+            return null;
+        }
+
+        return other.attachedRigidbody.GetComponent<Seed>();
     }
 }
