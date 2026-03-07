@@ -25,6 +25,8 @@ public class RestoreZone : MonoBehaviour
     private int itemsDelivered;
     private bool isRestored;
 
+    public static int TotalZonesRestored = 0;
+
     private void OnTriggerEnter(Collider other)
     {
         if (isRestored)
@@ -66,12 +68,30 @@ public class RestoreZone : MonoBehaviour
             restoreBurst.Play();
         }
 
+        this.GetComponent<AudioSource>()?.Play();
+
         SpawnPrefabs(plantPrefabs, plantsToSpawn);
         SpawnPrefabs(animalPrefabs, animalsToSpawn);
 
         onZoneRestored?.Invoke();
         WindWorldDirector.ReportZoneRestored();
     }
+
+    private void SpawnPrefabs(GameObject[] prefabs, int amount)
+    {
+        if (prefabs == null || prefabs.Length == 0 || amount <= 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < amount; i++)
+        {
+            GameObject prefab = prefabs[Random.Range(0, prefabs.Length)];
+            if (prefab == null)
+            {
+                continue;
+            }
+
 
     private void SpawnPrefabs(GameObject[] prefabs, int amount)
     {
