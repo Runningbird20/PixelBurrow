@@ -19,6 +19,7 @@ public class WindController : MonoBehaviour
         {
             carriedSeed.isCarried = false;
             carriedSeed.transform.parent = null;
+            carriedSeed.transform.position = transform.position + transform.forward + Vector3.up * 0.5f;
             carriedSeed = null;
         }
     }
