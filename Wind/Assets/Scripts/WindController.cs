@@ -12,7 +12,7 @@ public class WindController : MonoBehaviour
     public Transform carryPoint;
     public float dropForce = 1.5f;
     public float pickupRadius = 2f;
-    public Vector3 pickupOffset = new Vector3(0f, -2f, 0f);
+    public Vector3 pickupOffset = new Vector3(0f, 2f, 0f);
     public LayerMask pickupMask = ~0;
     private bool insideZone = false;
 
@@ -107,7 +107,7 @@ public class WindController : MonoBehaviour
 
     private void TryPickupNearbyItem()
     {
-        if (carriedItem != null || insideZone || pickupCooldownTimer > 0f)
+        if (carriedItem != null || pickupCooldownTimer > 0f)
         {
             return;
         }
