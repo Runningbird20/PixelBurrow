@@ -28,8 +28,21 @@ public class Seed : MonoBehaviour
     public void PickUp()
     {
         isCarried = true;
-        this.GetComponent<AudioSource>().Play();
+
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        if (cachedCollider != null)
+        {
+            cachedCollider.enabled = false;
+        }
+        // this.GetComponent<AudioSource>().Play();
         rb.isKinematic = true;
+        main
     }
 
     public void Drop(float launchForce = 1.5f, Vector3 launchDirection = default)
