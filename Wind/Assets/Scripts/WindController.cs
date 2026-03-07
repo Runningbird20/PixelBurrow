@@ -12,7 +12,7 @@ public class WindController : MonoBehaviour
     public Transform carryPoint;
     public float dropForce = 1.5f;
     public float pickupRadius = 2f;
-    public Vector3 pickupOffset = new Vector3(0f, 2f, 0f);
+    public Vector3 pickupOffset = Vector3.zero;
     public LayerMask pickupMask = ~0;
     private bool insideZone = false;
 
@@ -47,15 +47,14 @@ public class WindController : MonoBehaviour
 
     private void Update()
     {
-        UpdateMovement();
-        TryPickupNearbyItem();
-        HandleCarryInput();
-        UpdateEffects();
-
         if (pickupCooldownTimer > 0f)
         {
             pickupCooldownTimer -= Time.deltaTime;
         }
+        UpdateMovement();
+        TryPickupNearbyItem();
+        HandleCarryInput();
+        UpdateEffects();
     }
 
     private Vector3 MouseSteeringInput()
@@ -120,14 +119,22 @@ public class WindController : MonoBehaviour
             pickupMask,
             QueryTriggerInteraction.Collide);
 
-        for (int i = 0; i < hits; i++)
+            Debug.Log("Pickup hits: " + hits);
+
+       for (int i = 0; i < hits; i++)
         {
+            if (pickupHits[i] != null)
+            {
+                Debug.Log("Hit: " + pickupHits[i].name);
+            }
+
             Seed item = GetSeedFromCollider(pickupHits[i]);
             if (item == null || item.isCarried)
             {
                 continue;
             }
 
+            Debug.Log("Trying to pick up: " + item.name);
             TryPickup(item);
             break;
         }
@@ -209,10 +216,13 @@ public class WindController : MonoBehaviour
             return;
         }
 
+        if (!insideZone)
+        {
         carriedItem = item;
         item.PickUp();
         item.transform.parent = carryPoint;
         item.transform.localPosition = item.carryLocalOffset;
+        }
     }
 
     // Backward-compatible alias in case existing scene scripts/events still refer to the old method name.
