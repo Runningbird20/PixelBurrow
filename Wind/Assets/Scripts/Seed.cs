@@ -40,7 +40,7 @@ public class Seed : MonoBehaviour
         {
             cachedCollider.enabled = false;
         }
-        // this.GetComponent<AudioSource>().Play();
+        this.GetComponent<AudioSource>().Play();
         rb.isKinematic = true;
     }
 
