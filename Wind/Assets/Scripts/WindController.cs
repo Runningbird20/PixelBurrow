@@ -6,7 +6,7 @@ public class WindController : MonoBehaviour
     public float speed = 8f;
     public float acceleration = 4f;
     public float maxHeight = 6f;
-    public float minHeight = 1f;
+    public float minHeight = 0f;
 
     [Header("Carry")]
     public Transform carryPoint;
@@ -95,7 +95,7 @@ public class WindController : MonoBehaviour
         transform.position += velocity * Time.deltaTime;
 
         Vector3 clampedPosition = transform.position;
-        clampedPosition.y = Mathf.Clamp(clampedPosition.y, minHeight, maxHeight);
+        clampedPosition.y = 0;
         transform.position = clampedPosition;
 
         if (velocity.sqrMagnitude > 0.01f)

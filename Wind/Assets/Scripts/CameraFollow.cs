@@ -54,6 +54,17 @@ public class CameraFollow : MonoBehaviour
             Vector3 desired = target.position + offset;
             transform.position = Vector3.Lerp(transform.position, desired, smooth * Time.deltaTime);
 
-            transform.LookAt(target.position + Vector3.up * 1.5f);
+        transform.LookAt(target.position + Vector3.up * 1.5f);
+    }
+    
+    private int lastZoneCount = 0;
+
+    private void Update()
+    {
+        if (RestoreZone.TotalZonesRestored != lastZoneCount)
+        {
+            lastZoneCount = RestoreZone.TotalZonesRestored;
+            MusicUpdate();
         }
     }
+}
