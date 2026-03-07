@@ -17,9 +17,9 @@ public class WindController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && carriedSeed != null)
         {
-            carriedSeed.isCarried = false;
             carriedSeed.transform.parent = null;
-            carriedSeed.transform.position = transform.position + transform.forward + Vector3.up * 0.5f;
+            carriedSeed.transform.position = transform.position + transform.forward + Vector3.up * 1f;
+            carriedSeed.Drop();
             carriedSeed = null;
         }
     }
@@ -35,7 +35,7 @@ public class WindController : MonoBehaviour
         if (seed != null && !seed.isCarried)
         {
             carriedSeed = seed;
-            seed.isCarried = true;
+            seed.PickUp();
             seed.transform.parent = carryPoint;
             seed.transform.localPosition = Vector3.zero;
         }
