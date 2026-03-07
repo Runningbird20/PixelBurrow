@@ -14,8 +14,12 @@ public class BarrenAudioDriver : MonoBehaviour
         
     }
 
-    public void PlayBarrenAudio()
+    public static void PlayBarrenAudio()
     {
-        this.GetComponent<AudioSource>()?.Play();
+        var instance = FindObjectOfType<BarrenAudioDriver>();
+        if (instance != null)
+        {
+            instance.GetComponent<AudioSource>()?.Play();
+        }
     }
 }

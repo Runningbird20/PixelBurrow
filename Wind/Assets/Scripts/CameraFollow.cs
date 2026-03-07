@@ -56,4 +56,15 @@ public class CameraFollow : MonoBehaviour
 
         transform.LookAt(target.position + Vector3.up * 1.5f);
     }
+    
+    private int lastZoneCount = 0;
+
+    private void Update()
+    {
+        if (RestoreZone.TotalZonesRestored != lastZoneCount)
+        {
+            lastZoneCount = RestoreZone.TotalZonesRestored;
+            MusicUpdate();
+        }
+    }
 }

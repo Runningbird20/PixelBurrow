@@ -45,11 +45,7 @@ public class RestoreZone : MonoBehaviour
 
         if (itemsDelivered < itemsRequired)
         {
-            BarrenAudioDriver barrenAudio = GetComponent<BarrenAudioDriver>();
-            if (barrenAudio != null)
-            {
-                barrenAudio.PlayBarrenAudio();
-            }
+            BarrenAudioDriver.PlayBarrenAudio();
         }
 
         if (itemsDelivered >= itemsRequired)
@@ -78,6 +74,9 @@ public class RestoreZone : MonoBehaviour
         }
 
         this.GetComponent<AudioSource>()?.Play();
+
+        TotalZonesRestored++;
+        
 
         SpawnPrefabs(plantPrefabs, plantsToSpawn);
         SpawnPrefabs(animalPrefabs, animalsToSpawn);
