@@ -5790,6 +5790,11 @@ MonoBehaviour:
   target: {fileID: 1532615993}
   offset: {x: 0, y: 5, z: -6}
   smooth: 5
+  rotateWithRightClick: 1
+  lookSensitivity: 3
+  minPitch: 15
+  maxPitch: 75
+  minCameraY: 2
   music1: {fileID: 330585549}
   music2: {fileID: 330585553}
   music3: {fileID: 330585552}
@@ -5808,7 +5813,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 77322037b2e59b449bb00f7edebc5e76, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -5905,7 +5910,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: cfe2c3425c55a5c4cb8696f9773c4bcd, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 1
   Mute: 1
@@ -6002,7 +6007,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: dc14cb9abdcce8943b614550f234389b, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 1
   Mute: 1
@@ -6099,7 +6104,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 875f878716ae46540a5d9bf045db583a, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 1
   Mute: 1
@@ -6196,7 +6201,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 198c8393d3788eb4d8c1971266345209, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 1
   Mute: 1

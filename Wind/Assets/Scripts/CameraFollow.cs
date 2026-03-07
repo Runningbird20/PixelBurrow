@@ -61,54 +61,34 @@ public class CameraFollow : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-        
-    }
+    // private void LateUpdate()
+    // {
+    //     if (target == null)
+    //     {
+    //         return;
+    //     }
+
+    //     Vector3 desired = target.position + offset;
+    //     desired.y = Mathf.Max(minCameraY, desired.y);
+
+    //     Vector3 nextPosition = Vector3.Lerp(transform.position, desired, smooth * Time.deltaTime);
+    //     nextPosition.y = Mathf.Max(minCameraY, nextPosition.y);
+
+    //     transform.position = nextPosition;
+    //     transform.LookAt(target.position + Vector3.up * 1.5f);
+    // }
     
-    private int lastZoneCount = 0;
 
-    private void FixedUpdate()
-    {
-        if (target == null)
-        {
-            return;
-        }
+    // private void FixedUpdate()
+    // {
+    //     if (target == null)
+    //     {
+    //         return;
+    //     }
 
-        Vector3 desired = target.position + offset;
-        transform.position = Vector3.Lerp(transform.position, desired, smooth * Time.deltaTime);
-
-    public void MusicUpdate()
-    {
-        switch (RestoreZone.TotalZonesRestored)
-        {
-            case 1:
-                music1.Play();
-                music2.Play();
-                music3.Play();
-                music4.Play();
-                music5.Play();
-                break;
-            case 2:
-                music1.mute = true;
-                music2.mute = false;
-                break;
-            case 3:
-                music2.mute = true;
-                music3.mute = false;
-                break;
-            case 4:
-                music3.mute = true;
-                music4.mute = false;
-                break;
-            case 5:
-                music4.mute = true;
-                music5.mute = false;
-                break;
-            default:
-                break;
-        }
-    }
+    //     Vector3 desired = target.position + offset;
+    //     transform.position = Vector3.Lerp(transform.position, desired, smooth * Time.deltaTime);
+    // }
 
     private void Update()
     {
@@ -117,16 +97,17 @@ public class CameraFollow : MonoBehaviour
             lastZoneCount = RestoreZone.TotalZonesRestored;
             MusicUpdate();
         }
+
+        UpdateOrbitInput();
+
     }
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         if (target == null)
         {
             return;
         }
-
-        UpdateOrbitInput();
 
         Vector3 desired = target.position + offset;
         desired.y = Mathf.Max(minCameraY, desired.y);

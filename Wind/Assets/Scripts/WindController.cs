@@ -67,12 +67,6 @@ public class WindController : MonoBehaviour
         Vector3 targetVelocity = Vector3.ClampMagnitude(input, 1f) * speed;
         velocity = Vector3.Lerp(velocity, targetVelocity, Time.deltaTime * acceleration);
 
-        transform.position += velocity * Time.deltaTime;
-
-        Vector3 clampedPosition = transform.position;
-        clampedPosition.y = 0;
-        transform.position = clampedPosition;
-
         if (velocity.sqrMagnitude > 0.01f)
         {
             Vector3 lookDirection = new Vector3(velocity.x, 0f, velocity.z);
@@ -137,14 +131,16 @@ public class WindController : MonoBehaviour
             {
                 cameraRight = Vector3.right;
             }
-        if (velocity.sqrMagnitude > 0.01f)
-        {
-            Vector3 lookDirection = new Vector3(velocity.x, 0f, velocity.z);
-            transform.forward = Vector3.Slerp(transform.forward, lookDirection.normalized, Time.deltaTime * 8f);
-        }
+            if (velocity.sqrMagnitude > 0.01f)
+            {
+                Vector3 lookDirection = new Vector3(velocity.x, 0f, velocity.z);
+                transform.forward = Vector3.Slerp(transform.forward, lookDirection.normalized, Time.deltaTime * 8f);
+            }
 
-        Vector3 worldMove = cameraRight * x + cameraForward * z;
-        return Vector3.ClampMagnitude(worldMove, 1f);
+            Vector3 worldMove = cameraRight * x + cameraForward * z;
+            return Vector3.ClampMagnitude(worldMove, 1f);
+        }
+        return Vector3.zero;
     }
 
     private void TryPickupNearbyItem()
