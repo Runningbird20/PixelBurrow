@@ -11,18 +11,29 @@ public class WindController : MonoBehaviour
     [Header("Carry")]
     public Transform carryPoint;
     public float dropForce = 1.5f;
-    public float pickupRadius = 4f;
+    public float pickupRadius = 2f;
     public Vector3 pickupOffset = new Vector3(0f, -2f, 0f);
     public LayerMask pickupMask = ~0;
+    private bool insideZone = false;
 
     [Header("FX")]
     public ParticleSystem windTrail;
 
     private Seed carriedItem;
     private Vector3 velocity;
-
+    private float pickupCooldownTimer = 0f;
+    public float pickupCooldownDuration = 0.5f;
     private Camera mainCamera;
     private readonly Collider[] pickupHits = new Collider[16];
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("RestoreZone"))
+        {
+            insideZone = false;
+            Debug.Log("Exited restore zone");
+        }
+    }
 
     private void Start()
     {
@@ -40,6 +51,33 @@ public class WindController : MonoBehaviour
         TryPickupNearbyItem();
         HandleCarryInput();
         UpdateEffects();
+
+        if (pickupCooldownTimer > 0f)
+        {
+            pickupCooldownTimer -= Time.deltaTime;
+        }
+    }
+
+    private Vector3 MouseSteeringInput()
+    {
+        if (mainCamera == null)
+        {
+            return Vector3.zero;
+        }
+
+        Ray mouseRay = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Plane plane = new Plane(Vector3.up, new Vector3(0f, transform.position.y, 0f));
+
+        if (!plane.Raycast(mouseRay, out float distance))
+        {
+            return Vector3.zero;
+        }
+
+        Vector3 hitPoint = mouseRay.GetPoint(distance);
+        Vector3 direction = hitPoint - transform.position;
+        direction.y = 0f;
+
+        return direction.normalized;
     }
 
     private void UpdateMovement()
@@ -67,31 +105,9 @@ public class WindController : MonoBehaviour
         }
     }
 
-    private Vector3 MouseSteeringInput()
-    {
-        if (mainCamera == null)
-        {
-            return Vector3.zero;
-        }
-
-        Ray mouseRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-        Plane plane = new Plane(Vector3.up, new Vector3(0f, transform.position.y, 0f));
-
-        if (!plane.Raycast(mouseRay, out float distance))
-        {
-            return Vector3.zero;
-        }
-
-        Vector3 hitPoint = mouseRay.GetPoint(distance);
-        Vector3 direction = hitPoint - transform.position;
-        direction.y = 0f;
-
-        return direction.normalized;
-    }
-
     private void TryPickupNearbyItem()
     {
-        if (carriedItem != null)
+        if (carriedItem != null || insideZone || pickupCooldownTimer > 0f)
         {
             return;
         }
@@ -119,7 +135,12 @@ public class WindController : MonoBehaviour
 
     private void HandleCarryInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && carriedItem != null)
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Space pressed | carriedItem: " + (carriedItem != null) + " | insideZone: " + insideZone);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && carriedItem != null && insideZone)
         {
             Vector3 dropDirection = transform.forward + Vector3.up * 0.6f;
 
@@ -127,6 +148,10 @@ public class WindController : MonoBehaviour
             carriedItem.transform.position = transform.position + transform.forward + Vector3.up * 0.5f;
             carriedItem.Drop(dropForce, dropDirection);
             carriedItem = null;
+
+            pickupCooldownTimer = pickupCooldownDuration;
+
+            Debug.Log("Dropped seed in restore zone");
         }
     }
 
@@ -143,16 +168,10 @@ public class WindController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (carriedItem != null)
+        if (other.CompareTag("RestoreZone"))
         {
-            return;
-        }
-
-        Seed item = GetSeedFromCollider(other);
-
-        if (item != null && !item.isCarried)
-        {
-            TryPickup(item);
+            insideZone = true;
+            Debug.Log("Entered restore zone");
         }
     }
 
@@ -181,6 +200,25 @@ public class WindController : MonoBehaviour
         }
 
         return other.attachedRigidbody.GetComponent<Seed>();
+    }
+
+    private void TryPickup(Seed item)
+    {
+        if (item == null || item.isCarried || carriedItem != null)
+        {
+            return;
+        }
+
+        carriedItem = item;
+        item.PickUp();
+        item.transform.parent = carryPoint;
+        item.transform.localPosition = item.carryLocalOffset;
+    }
+
+    // Backward-compatible alias in case existing scene scripts/events still refer to the old method name.
+    private void TryPickUp(Seed item)
+    {
+        TryPickup(item);
     }
 
     #if UNITY_EDITOR
