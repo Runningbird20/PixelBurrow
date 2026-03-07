@@ -42,7 +42,6 @@ public class Seed : MonoBehaviour
         }
         // this.GetComponent<AudioSource>().Play();
         rb.isKinematic = true;
-        main
     }
 
     public void Drop(float launchForce = 1.5f, Vector3 launchDirection = default)
