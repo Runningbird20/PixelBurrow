@@ -28,6 +28,18 @@ public class Seed : MonoBehaviour
     public void PickUp()
     {
         isCarried = true;
+
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        if (cachedCollider != null)
+        {
+            cachedCollider.enabled = false;
+        }
         // this.GetComponent<AudioSource>().Play();
         rb.isKinematic = true;
     }
