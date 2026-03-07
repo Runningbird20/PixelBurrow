@@ -20,6 +20,11 @@ A peaceful exploration prototype where the player is the wind, restoring life by
    - optional barren/restored visuals, plant prefabs, animal prefabs.
 5. (Optional) Add `WindWorldDirector` to a manager object and connect music/light for progression mood.
 6. (Optional) Add `WindHUD` to any active object for minimal on-screen controls text.
+7. (Optional) Add `SeedSpawner` to an empty object to auto-spawn seeds and respawn them after delivery.
+   - Assign `seedPrefab` (a prefab with `Seed` + collider + rigidbody).
+   - Set `targetSeedCount` to the amount you want active in the world.
+   - Use `spawnPoints` for fixed locations, or leave empty to spawn around the spawner transform.
+   - Toggle `respawnSeeds` and tune `respawnDelay` for pacing.
 
 ## Visual Style Notes
 
