@@ -73,7 +73,12 @@ public class RestoreZone : MonoBehaviour
             restoreBurst.Play();
         }
 
-        this.GetComponent<AudioSource>()?.Play();
+        AudioSource sfxPlayer = this.GetComponent<AudioSource>();
+
+        if (sfxPlayer != null)
+        {
+            sfxPlayer.Play();
+        }
 
         TotalZonesRestored++;
         
