@@ -174,7 +174,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5914790888507418064, guid: 30a7b9cfdf4e81442bcc646a77ccc054, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 422130009}
   m_SourcePrefab: {fileID: 100100000, guid: 30a7b9cfdf4e81442bcc646a77ccc054, type: 3}
 --- !u!1001 &280821057
 PrefabInstance:
@@ -251,9 +254,10 @@ GameObject:
   m_Component:
   - component: {fileID: 330585546}
   - component: {fileID: 330585545}
-  - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
+  - component: {fileID: 330585549}
+  - component: {fileID: 330585550}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -261,14 +265,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &330585544
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330585543}
-  m_Enabled: 1
 --- !u!20 &330585545
 Camera:
   m_ObjectHideFlags: 0
@@ -638,7 +634,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5914790888507418064, guid: 30a7b9cfdf4e81442bcc646a77ccc054, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1148176835}
   m_SourcePrefab: {fileID: 100100000, guid: 30a7b9cfdf4e81442bcc646a77ccc054, type: 3}
 --- !u!1 &545100934
 GameObject:
@@ -1363,6 +1362,7 @@ GameObject:
   - component: {fileID: 1532615992}
   - component: {fileID: 1532615994}
   - component: {fileID: 1532615995}
+  - component: {fileID: 1532615996}
   m_Layer: 0
   m_Name: WindPlayer
   m_TagString: Untagged
@@ -1509,7 +1509,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5914790888507418064, guid: 30a7b9cfdf4e81442bcc646a77ccc054, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1645217391}
   m_SourcePrefab: {fileID: 100100000, guid: 30a7b9cfdf4e81442bcc646a77ccc054, type: 3}
 --- !u!1 &1594999084
 GameObject:
