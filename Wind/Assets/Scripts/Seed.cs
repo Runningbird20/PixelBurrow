@@ -2,23 +2,65 @@ using UnityEngine;
 
 public class Seed : MonoBehaviour
 {
-    public bool isCarried = false;
-    private Rigidbody rb;
+    public enum NatureItemType
+    {
+        Seed,
+        Petal,
+        Cloud
+    }
 
-    void Awake()
+    [Header("Item Settings")]
+    public NatureItemType itemType = NatureItemType.Seed;
+    public bool isCarried = false;
+
+    [Header("Carry Visual")]
+    public Vector3 carryLocalOffset = Vector3.zero;
+
+    private Rigidbody rb;
+    private Collider cachedCollider;
+
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        cachedCollider = GetComponent<Collider>();
     }
 
     public void PickUp()
     {
         isCarried = true;
-        rb.isKinematic = true;
+
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        if (cachedCollider != null)
+        {
+            cachedCollider.enabled = false;
+        }
     }
 
-    public void Drop()
+    public void Drop(float launchForce = 1.5f, Vector3 launchDirection = default)
     {
         isCarried = false;
-        rb.isKinematic = false;
+
+        if (cachedCollider != null)
+        {
+            cachedCollider.enabled = true;
+        }
+
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+
+            if (launchDirection == default)
+            {
+                launchDirection = Vector3.up;
+            }
+
+            rb.AddForce(launchDirection.normalized * launchForce, ForceMode.Impulse);
+        }
     }
 }
