@@ -92,6 +92,22 @@ public class RestoreZone : MonoBehaviour
                 continue;
             }
 
+
+    private void SpawnPrefabs(GameObject[] prefabs, int amount)
+    {
+        if (prefabs == null || prefabs.Length == 0 || amount <= 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < amount; i++)
+        {
+            GameObject prefab = prefabs[Random.Range(0, prefabs.Length)];
+            if (prefab == null)
+            {
+                continue;
+            }
+
             Vector2 offset2D = Random.insideUnitCircle * spawnRadius;
             Vector3 spawnPosition = transform.position + new Vector3(offset2D.x, 0f, offset2D.y);
 

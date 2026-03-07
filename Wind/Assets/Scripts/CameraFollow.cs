@@ -6,6 +6,8 @@ public class CameraFollow : MonoBehaviour
     public Vector3 offset = new Vector3(0f, 7f, -9f);
     public float smooth = 5f;
 
+    private void LateUpdate()
+    {
     public AudioSource music1;
     public AudioSource music2; 
     public AudioSource music3;
