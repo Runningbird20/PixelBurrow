@@ -11,9 +11,6 @@ public class WindController : MonoBehaviour
     [Header("Carry")]
     public Transform carryPoint;
     public float dropForce = 1.5f;
-    public float pickupRadius = 4f;
-    public Vector3 pickupOffset = new Vector3(0f, -2f, 0f);
-    public LayerMask pickupMask = ~0;
 
     [Header("FX")]
     public ParticleSystem windTrail;
@@ -22,7 +19,6 @@ public class WindController : MonoBehaviour
     private Vector3 velocity;
 
     private Camera mainCamera;
-    private readonly Collider[] pickupHits = new Collider[16];
 
     private void Start()
     {
@@ -32,7 +28,6 @@ public class WindController : MonoBehaviour
     private void Update()
     {
         UpdateMovement();
-        TryPickupNearbyItem();
         HandleCarryInput();
         UpdateEffects();
     }
@@ -84,34 +79,6 @@ public class WindController : MonoBehaviour
         return direction.normalized;
     }
 
-    private void TryPickupNearbyItem()
-    {
-        if (carriedItem != null)
-        {
-            return;
-        }
-
-        Vector3 pickupCenter = transform.position + pickupOffset;
-        int hits = Physics.OverlapSphereNonAlloc(
-            pickupCenter,
-            pickupRadius,
-            pickupHits,
-            pickupMask,
-            QueryTriggerInteraction.Collide);
-
-        for (int i = 0; i < hits; i++)
-        {
-            Seed item = pickupHits[i].GetComponent<Seed>();
-            if (item == null || item.isCarried)
-            {
-                continue;
-            }
-
-            TryPickUp(item);
-            break;
-        }
-    }
-
     private void HandleCarryInput()
     {
         if (Input.GetKeyDown(KeyCode.Space) && carriedItem != null)
@@ -147,28 +114,10 @@ public class WindController : MonoBehaviour
 
         if (item != null && !item.isCarried)
         {
-            TryPickUp(item);
+            carriedItem = item;
+            item.PickUp();
+            item.transform.parent = carryPoint;
+            item.transform.localPosition = item.carryLocalOffset;
         }
     }
-
-    private void TryPickUp(Seed item)
-    {
-        if (item == null || item.isCarried || carriedItem != null)
-        {
-            return;
-        }
-
-        carriedItem = item;
-        item.PickUp();
-        item.transform.parent = carryPoint;
-        item.transform.localPosition = item.carryLocalOffset;
-    }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = new Color(0.55f, 0.9f, 1f, 0.7f);
-        Gizmos.DrawWireSphere(transform.position + pickupOffset, pickupRadius);
-    }
-#endif
 }
