@@ -43,6 +43,15 @@ public class RestoreZone : MonoBehaviour
         itemsDelivered++;
         Destroy(item.gameObject);
 
+        if (itemsDelivered < itemsRequired)
+        {
+            BarrenAudioDriver barrenAudio = GetComponent<BarrenAudioDriver>();
+            if (barrenAudio != null)
+            {
+                barrenAudio.PlayBarrenAudio();
+            }
+        }
+
         if (itemsDelivered >= itemsRequired)
         {
             Restore();
