@@ -7,6 +7,7 @@ public class WindController : MonoBehaviour
     public float acceleration = 4f;
     public float maxHeight = 6f;
     public float minHeight = 0f;
+    private Rigidbody rb;
 
     [Header("Carry")]
     public Transform carryPoint;
@@ -38,6 +39,8 @@ public class WindController : MonoBehaviour
     private void Start()
     {
         mainCamera = Camera.main;
+
+        rb = GetComponent<Rigidbody>();
 
         if (carryPoint == null)
         {
@@ -134,6 +137,10 @@ public class WindController : MonoBehaviour
             {
                 cameraRight = Vector3.right;
             }
+        if (velocity.sqrMagnitude > 0.01f)
+        {
+            Vector3 lookDirection = new Vector3(velocity.x, 0f, velocity.z);
+            transform.forward = Vector3.Slerp(transform.forward, lookDirection.normalized, Time.deltaTime * 8f);
         }
 
         Vector3 worldMove = cameraRight * x + cameraForward * z;
@@ -274,6 +281,11 @@ public class WindController : MonoBehaviour
     private void TryPickUp(Seed item)
     {
         TryPickup(item);
+    }
+    
+    private void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
     }
 
     #if UNITY_EDITOR
