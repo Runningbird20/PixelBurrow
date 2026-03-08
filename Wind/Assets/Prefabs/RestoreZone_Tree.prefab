@@ -66,9 +66,9 @@ Transform:
   m_LocalScale: {x: 0.5, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 588484466773877078}
   - {fileID: 1638718956399612760}
   - {fileID: 5867716272123948067}
+  - {fileID: 588484466773877078}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7177522352906910646
@@ -188,11 +188,7 @@ MonoBehaviour:
   restoredVisuals: {fileID: 6197928471227442624}
   barrenVisuals: {fileID: 1119860607300206809}
   restoreBurst: {fileID: 0}
-  plantPrefabs: []
-  plantsToSpawn: 3
-  animalPrefabs: []
-  animalsToSpawn: 2
-  spawnRadius: 3
+  plantSpawner: {fileID: 0}
   onZoneRestored:
     m_PersistentCalls:
       m_Calls: []
@@ -661,13 +657,44 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1278138451156127567, guid: 02a3383e19ca4824ca8bc59f4a21fae7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4957526282368926668}
   m_SourcePrefab: {fileID: 100100000, guid: 02a3383e19ca4824ca8bc59f4a21fae7, type: 3}
 --- !u!4 &1690014003901289056 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6775589493326588243, guid: 02a3383e19ca4824ca8bc59f4a21fae7, type: 3}
   m_PrefabInstance: {fileID: 5292741622119889715}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6399408709403718780 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1278138451156127567, guid: 02a3383e19ca4824ca8bc59f4a21fae7, type: 3}
+  m_PrefabInstance: {fileID: 5292741622119889715}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4957526282368926668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6399408709403718780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c57c9195dd40df45b74bc10b2edfa01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZonePlantSpawner
+  plantPrefabs: []
+  plantCount: 10
+  plantSpawnZoneTag: PlantSpawnZone
+  yOffset: 0
+  spawnOnStart: 0
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  raycastStartHeight: 100
+  scaleRange: {x: 0.8, y: 1.2}
+  plantParent: {fileID: 0}
 --- !u!1001 &6897892230482588632
 PrefabInstance:
   m_ObjectHideFlags: 0

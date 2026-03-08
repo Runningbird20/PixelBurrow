@@ -18,6 +18,7 @@ public class CameraFollow : MonoBehaviour
     public AudioSource music3;
     public AudioSource music4;
     public AudioSource music5;
+    public AudioSource musicPond;
 
     private float orbitYaw;
     private float orbitPitch;
@@ -39,25 +40,27 @@ public class CameraFollow : MonoBehaviour
                 music3.Play();
                 music4.Play();
                 music5.Play();
+                musicPond.Play();
                 break;
             case 2:
-                music1.mute = true;
                 music2.mute = false;
                 break;
             case 3:
-                music2.mute = true;
                 music3.mute = false;
                 break;
             case 4:
-                music3.mute = true;
                 music4.mute = false;
                 break;
             case 5:
-                music4.mute = true;
                 music5.mute = false;
                 break;
             default:
                 break;
+        }
+
+        if (RestoreZone.pondRestored)
+        {
+            musicPond.mute = false;
         }
     }
 
@@ -78,7 +81,6 @@ public class CameraFollow : MonoBehaviour
     //     transform.LookAt(target.position + Vector3.up * 1.5f);
     // }
     
-
     // private void FixedUpdate()
     // {
     //     if (target == null)

@@ -208,6 +208,11 @@ public class WindController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("KillZone"))
+        {
+            this.transform.position = Vector3.zero;
+        }
+
         if (IsRestoreZoneTrigger(other))
         {
             insideZone = true;

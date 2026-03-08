@@ -21,6 +21,7 @@ public class RestoreZone : MonoBehaviour
     private bool isRestored;
 
     public static int TotalZonesRestored = 0;
+    public static bool pondRestored = false;
 
     private void Awake()
     {
@@ -95,6 +96,13 @@ public class RestoreZone : MonoBehaviour
         if (restoreBurst != null)
         {
             restoreBurst.Play();
+        }
+
+        Transform visuals = restoredVisuals.transform;
+
+        if (restoredVisuals != null && visuals.CompareTag("Pond"))
+        {
+            pondRestored = true;
         }
 
         AudioSource sfxPlayer = this.GetComponent<AudioSource>();
