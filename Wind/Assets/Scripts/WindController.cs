@@ -29,7 +29,7 @@ public class WindController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("RestoreZone"))
+        if (IsRestoreZoneTrigger(other))
         {
             insideZone = false;
             Debug.Log("Exited restore zone");
@@ -60,37 +60,9 @@ public class WindController : MonoBehaviour
         UpdateEffects();
     }
 
-
-    private Vector3 MouseSteeringInput()
-    {
-        if (mainCamera == null)
-        {
-            return Vector3.zero;
-        }
-
-        Ray mouseRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-        Plane plane = new Plane(Vector3.up, new Vector3(0f, transform.position.y, 0f));
-
-        if (!plane.Raycast(mouseRay, out float distance))
-        {
-            return Vector3.zero;
-        }
-
-        Vector3 hitPoint = mouseRay.GetPoint(distance);
-        Vector3 direction = hitPoint - transform.position;
-        direction.y = 0f;
-
-        return direction.normalized;
-    }
-
     private void UpdateMovement()
     {
-        Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
-
-        if (input.sqrMagnitude < 0.01f && Input.mousePresent)
-        {
-            input = MouseSteeringInput();
-        }
+        Vector3 input = GetWasdInput();
 
         Vector3 targetVelocity = Vector3.ClampMagnitude(input, 1f) * speed;
         velocity = Vector3.Lerp(velocity, targetVelocity, Time.deltaTime * acceleration);
@@ -100,6 +72,75 @@ public class WindController : MonoBehaviour
             Vector3 lookDirection = new Vector3(velocity.x, 0f, velocity.z);
             transform.forward = Vector3.Slerp(transform.forward, lookDirection.normalized, Time.deltaTime * 8f);
         }
+    }
+
+    private Vector3 GetWasdInput()
+    {
+        float x = 0f;
+        float z = 0f;
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            x -= 1f;
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            x += 1f;
+        }
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            z -= 1f;
+        }
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            z += 1f;
+        }
+
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        }
+
+        Vector3 cameraForward = Vector3.forward;
+        Vector3 cameraRight = Vector3.right;
+
+        if (mainCamera != null)
+        {
+            cameraForward = mainCamera.transform.forward;
+            cameraRight = mainCamera.transform.right;
+            cameraForward.y = 0f;
+            cameraRight.y = 0f;
+
+            if (cameraForward.sqrMagnitude > 0.0001f)
+            {
+                cameraForward.Normalize();
+            }
+            else
+            {
+                cameraForward = Vector3.forward;
+            }
+
+            if (cameraRight.sqrMagnitude > 0.0001f)
+            {
+                cameraRight.Normalize();
+            }
+            else
+            {
+                cameraRight = Vector3.right;
+            }
+            if (velocity.sqrMagnitude > 0.01f)
+            {
+                Vector3 lookDirection = new Vector3(velocity.x, 0f, velocity.z);
+                transform.forward = Vector3.Slerp(transform.forward, lookDirection.normalized, Time.deltaTime * 8f);
+            }
+
+            Vector3 worldMove = cameraRight * x + cameraForward * z;
+            return Vector3.ClampMagnitude(worldMove, 1f);
+        }
+        return Vector3.zero;
     }
 
     private void TryPickupNearbyItem()
@@ -117,14 +158,8 @@ public class WindController : MonoBehaviour
             pickupMask,
             QueryTriggerInteraction.Collide);
 
-            Debug.Log("Pickup hits: " + hits);
-
        for (int i = 0; i < hits; i++)
         {
-            if (pickupHits[i] != null)
-            {
-                Debug.Log("Hit: " + pickupHits[i].name);
-            }
 
             Seed item = GetSeedFromCollider(pickupHits[i]);
             if (item == null || item.isCarried)
@@ -173,11 +208,31 @@ public class WindController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("RestoreZone"))
+        if (other.CompareTag("KillZone"))
+        {
+            this.transform.position = Vector3.zero;
+        }
+
+        if (IsRestoreZoneTrigger(other))
         {
             insideZone = true;
             Debug.Log("Entered restore zone");
         }
+    }
+
+    private bool IsRestoreZoneTrigger(Collider other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+
+        if (other.GetComponent<RestoreZone>() != null)
+        {
+            return true;
+        }
+
+        return other.GetComponentInParent<RestoreZone>() != null;
     }
 
     private Seed GetSeedFromCollider(Collider other)

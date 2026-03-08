@@ -21,9 +21,10 @@ public class WindHUD : MonoBehaviour
         GUILayout.BeginArea(new Rect(18f, 18f, 500f, 180f));
         GUILayout.Label(title, titleStyle);
         GUILayout.Label(subtitle, bodyStyle);
-        GUILayout.Label("Move: WASD / Arrow keys / Mouse", bodyStyle);
+        GUILayout.Label("Move: WASD", bodyStyle);
         GUILayout.Label("Pick up: fly through seeds/petals/clouds", bodyStyle);
         GUILayout.Label("Drop: Space", bodyStyle);
+        GUILayout.Label("Camera: Hold Right Mouse + move", bodyStyle);
         GUILayout.EndArea();
     }
 

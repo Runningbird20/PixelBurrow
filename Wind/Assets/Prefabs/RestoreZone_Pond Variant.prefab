@@ -928,7 +928,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6197928471227442624, guid: e5e1e9b916d51714395a696fc3c40bd0, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197928471227442624, guid: e5e1e9b916d51714395a696fc3c40bd0, type: 3}
+      propertyPath: m_TagString
+      value: Pond
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -1027,7 +1031,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9187151304619298235, guid: 8671550ce867c274b8bcc9ae4def980f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
