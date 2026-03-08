@@ -12,6 +12,8 @@ public class ZonePlantSpawner : MonoBehaviour
     public bool spawnOnStart = false;
     public LayerMask groundMask = ~0;
     public float raycastStartHeight = 10f;
+    public bool useTaggedSpawnAreas = true;
+    public string spawnAreaTag = "PlantSpawnZone";
 
     [Header("Placement")]
     public int maxAttemptsPerPlant = 20;
