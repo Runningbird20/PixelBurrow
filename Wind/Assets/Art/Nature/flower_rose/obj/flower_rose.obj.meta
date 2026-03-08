@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: f920b90f517f1a0439133117300bee43
+labels:
+- Vegetation
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -106,5 +108,5 @@ ModelImporter:
   remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
   userData: 
-  assetBundleName: 
+  assetBundleName: unifiedraytracing
   assetBundleVariant: 
