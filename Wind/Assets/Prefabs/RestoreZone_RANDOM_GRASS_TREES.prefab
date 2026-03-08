@@ -5577,6 +5577,8 @@ MonoBehaviour:
   - {fileID: 6877517255892291896, guid: 8a0636d588f0df442b70ecd41151948a, type: 3}
   - {fileID: 7690790855833412622, guid: 2675ec5f8d426c84b8210266caf3dcfe, type: 3}
   - {fileID: 7690790855833412622, guid: 2675ec5f8d426c84b8210266caf3dcfe, type: 3}
+  - {fileID: 1278138451156127567, guid: 02a3383e19ca4824ca8bc59f4a21fae7, type: 3}
+  - {fileID: 2971759707245539248, guid: fce541af5468dbf4da80e49bd4d9bb73, type: 3}
   plantCount: 10
   yOffset: 0
   spawnOnStart: 0
@@ -5687,7 +5689,7 @@ PrefabInstance:
       objectReference: {fileID: 2590442814724579668}
     - target: {fileID: 6002655114390250636, guid: e5e1e9b916d51714395a696fc3c40bd0, type: 3}
       propertyPath: m_Name
-      value: RestoreZone_RANDOM_GRASS_TREES 1
+      value: RestoreZone_RANDOM_GRASS_TREES
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
