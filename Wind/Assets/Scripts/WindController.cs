@@ -286,9 +286,7 @@ public class WindController : MonoBehaviour
     
     private void FixedUpdate()
     {
-        Vector3 move = velocity * Time.fixedDeltaTime;
-
-        rb.MovePosition(rb.position + new Vector3(move.x, 0f, move.z));
+        rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
     }
 
     #if UNITY_EDITOR
