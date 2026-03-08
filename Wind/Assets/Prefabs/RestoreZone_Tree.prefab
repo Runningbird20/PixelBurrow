@@ -188,7 +188,7 @@ MonoBehaviour:
   restoredVisuals: {fileID: 6197928471227442624}
   barrenVisuals: {fileID: 1119860607300206809}
   restoreBurst: {fileID: 0}
-  plantSpawner: {fileID: 0}
+  plantSpawner: {fileID: 4957526282368926668}
   onZoneRestored:
     m_PersistentCalls:
       m_Calls: []
