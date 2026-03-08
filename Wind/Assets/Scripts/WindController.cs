@@ -7,6 +7,7 @@ public class WindController : MonoBehaviour
     public float acceleration = 4f;
     public float maxHeight = 6f;
     public float minHeight = 0f;
+    private Rigidbody rb;
 
     [Header("Carry")]
     public Transform carryPoint;
@@ -39,6 +40,8 @@ public class WindController : MonoBehaviour
     {
         mainCamera = Camera.main;
 
+        rb = GetComponent<Rigidbody>();
+
         if (carryPoint == null)
         {
             carryPoint = transform;
@@ -63,12 +66,6 @@ public class WindController : MonoBehaviour
 
         Vector3 targetVelocity = Vector3.ClampMagnitude(input, 1f) * speed;
         velocity = Vector3.Lerp(velocity, targetVelocity, Time.deltaTime * acceleration);
-
-        transform.position += velocity * Time.deltaTime;
-
-        Vector3 clampedPosition = transform.position;
-        clampedPosition.y = 0;
-        transform.position = clampedPosition;
 
         if (velocity.sqrMagnitude > 0.01f)
         {
@@ -134,10 +131,16 @@ public class WindController : MonoBehaviour
             {
                 cameraRight = Vector3.right;
             }
-        }
+            if (velocity.sqrMagnitude > 0.01f)
+            {
+                Vector3 lookDirection = new Vector3(velocity.x, 0f, velocity.z);
+                transform.forward = Vector3.Slerp(transform.forward, lookDirection.normalized, Time.deltaTime * 8f);
+            }
 
-        Vector3 worldMove = cameraRight * x + cameraForward * z;
-        return Vector3.ClampMagnitude(worldMove, 1f);
+            Vector3 worldMove = cameraRight * x + cameraForward * z;
+            return Vector3.ClampMagnitude(worldMove, 1f);
+        }
+        return Vector3.zero;
     }
 
     private void TryPickupNearbyItem()
@@ -205,6 +208,11 @@ public class WindController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("KillZone"))
+        {
+            this.transform.position = Vector3.zero;
+        }
+
         if (IsRestoreZoneTrigger(other))
         {
             insideZone = true;
@@ -274,6 +282,11 @@ public class WindController : MonoBehaviour
     private void TryPickUp(Seed item)
     {
         TryPickup(item);
+    }
+    
+    private void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
     }
 
     #if UNITY_EDITOR

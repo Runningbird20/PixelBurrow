@@ -35,6 +35,11 @@ public class SeedSpawner : MonoBehaviour
 
     private void Update()
     {
+        if (!this.isActiveAndEnabled)
+        {
+            return;
+        }
+
         int consumedCount = RemoveMissingSeeds();
         if (!respawnSeeds || consumedCount <= 0)
         {
