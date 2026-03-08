@@ -5687,7 +5687,7 @@ PrefabInstance:
       objectReference: {fileID: 2590442814724579668}
     - target: {fileID: 6002655114390250636, guid: e5e1e9b916d51714395a696fc3c40bd0, type: 3}
       propertyPath: m_Name
-      value: RestoreZone_1_RANDOM
+      value: RestoreZone_RANDOM_GRASS
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
