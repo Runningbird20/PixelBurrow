@@ -23,12 +23,6 @@ public class SeedSpawner : MonoBehaviour
 
     private void Start()
     {
-        if (seedPrefab == null)
-        {
-            Debug.LogWarning("SeedSpawner requires a Seed prefab.");
-            enabled = false;
-            return;
-        }
 
         CacheTaggedSpawnAreas();
 
