@@ -105,6 +105,13 @@ public class RestoreZone : MonoBehaviour
             pondRestored = true;
         }
 
+        MeshRenderer renderer = this.GetComponent<MeshRenderer>();
+
+        if (renderer != null)
+        {
+            renderer.enabled = false;
+        }
+
         AudioSource sfxPlayer = this.GetComponent<AudioSource>();
 
         if (sfxPlayer != null)

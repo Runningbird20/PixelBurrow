@@ -4912,6 +4912,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 2.29
       objectReference: {fileID: 0}
+    - target: {fileID: 1775099790770786291, guid: e5e1e9b916d51714395a696fc3c40bd0, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3568011761505759966, guid: e5e1e9b916d51714395a696fc3c40bd0, type: 3}
       propertyPath: seedsRequired
       value: 2
@@ -4955,6 +4959,10 @@ PrefabInstance:
     - target: {fileID: 8623684810300454345, guid: e5e1e9b916d51714395a696fc3c40bd0, type: 3}
       propertyPath: m_LocalPosition.z
       value: 3.89
+      objectReference: {fileID: 0}
+    - target: {fileID: 9044867858033755743, guid: e5e1e9b916d51714395a696fc3c40bd0, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
